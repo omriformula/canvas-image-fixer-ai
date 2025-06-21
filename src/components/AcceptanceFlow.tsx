@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import { StyledButton, StyledForm } from '@/design-system';
-
 const AcceptanceFlow = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [paymentAmount] = useState('$10,000');
@@ -63,7 +62,7 @@ const AcceptanceFlow = () => {
 
         <StyledForm onSubmit={handleSchedulePayment}>
           <div className="mb-8 flex justify-center">
-            <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4" classNames={{
+            <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} classNames={{
             months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
             month: "space-y-4",
             caption: "flex justify-center pt-1 relative items-center text-white font-semibold",
@@ -95,7 +94,7 @@ const AcceptanceFlow = () => {
                       </div>
                     </div>;
             }
-          }} />
+          }} className="rounded-2xl border border-white/20 backdrop-blur-sm p-4 bg-transparent" />
           </div>
 
           {selectedDate && <div className="mb-6 p-4 rounded-2xl text-center bg-white/10 backdrop-blur-sm border border-white/20">
