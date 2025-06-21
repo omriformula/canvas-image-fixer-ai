@@ -35,7 +35,7 @@ export const FormCard: React.FC<FormCardProps> = ({
         fontWeight: designTokens.typography.heading.weight,
         color: designTokens.colors.text.primary,
         fontFamily: designTokens.typography.heading.family
-      }} className="mb-6 text-4xl font-light">
+      }} className="mb-6 font-light text-4xl">
             {title}
           </h3>}
         {children}
