@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +37,7 @@ const PaymentOfferForm = () => {
         {/* Hero Image - 16:9 aspect ratio */}
         <AspectRatio ratio={16 / 9} className="rounded-t-3xl overflow-hidden">
           <img 
-            src="/lovable-uploads/e0d33fe8-6348-4e32-83f2-01f518339b1b.png" 
+            src="/lovable-uploads/3ddd0a66-6fbf-4d23-ac56-bd6b303c55c5.png" 
             alt="Hero Image"
             className="w-full h-full object-cover"
           />
