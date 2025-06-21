@@ -9,6 +9,7 @@ import Acceptance from "./pages/Acceptance";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import LeadCapture from "./pages/LeadCapture";
+import EmailLandingPreview from "./pages/EmailLandingPreview";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/acceptance" element={<Acceptance />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/get-integration" element={<LeadCapture />} />
+          <Route path="/email-preview" element={<EmailLandingPreview />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
