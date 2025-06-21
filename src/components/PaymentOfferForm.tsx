@@ -1,12 +1,16 @@
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
+import {
+  PageContainer,
+  FormCard,
+  FormField,
+  StyledInput,
+  StyledSelect,
+  StyledButton,
+  StyledForm
+} from '@/design-system';
 
 const PaymentOfferForm = () => {
   const [recipient, setRecipient] = useState('');
@@ -31,130 +35,94 @@ const PaymentOfferForm = () => {
     });
   };
 
+  const recipientOptions = [
+    { value: 'vendor', label: 'Vendor' },
+    { value: 'customer', label: 'Customer' }
+  ];
+
   return (
-    <div className="bg-[#f3f2ed] min-h-screen py-10 px-4">
-      <div className="max-w-[460px] mx-auto">
-        {/* Hero Image - 16:9 aspect ratio */}
-        <AspectRatio ratio={16 / 9} className="rounded-t-3xl overflow-hidden">
-          <img 
-            src="/lovable-uploads/3ddd0a66-6fbf-4d23-ac56-bd6b303c55c5.png" 
-            alt="Hero Image"
-            className="w-full h-full object-cover"
-          />
-        </AspectRatio>
-        
-        {/* Form Container - separate from image */}
-        <div className="bg-white rounded-b-3xl shadow-lg p-6">
-          <h3 className="text-xl font-medium mb-6 text-[#1a1a1a] font-['Work_Sans']">
-            Create a Payment Offer
-          </h3>
+    <PageContainer>
+      <FormCard
+        title="Create a Payment Offer"
+        heroImage="/lovable-uploads/3ddd0a66-6fbf-4d23-ac56-bd6b303c55c5.png"
+        heroAlt="Hero Image"
+      >
+        <StyledForm onSubmit={handleSubmit}>
+          <FormField label="Who will receive the offer?" htmlFor="recipient">
+            <StyledSelect
+              value={recipient}
+              onValueChange={setRecipient}
+              placeholder="Select recipient"
+              options={recipientOptions}
+            />
+          </FormField>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="recipient" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                Who will receive the offer?
-              </Label>
-              <Select value={recipient} onValueChange={setRecipient}>
-                <SelectTrigger className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white">
-                  <SelectValue placeholder="Select recipient" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="vendor">Vendor</SelectItem>
-                  <SelectItem value="customer">Customer</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <FormField label="From (your company name)" htmlFor="from">
+            <StyledInput
+              id="from"
+              type="text"
+              value={fromCompany}
+              onChange={(e) => setFromCompany(e.target.value)}
+              placeholder="Your Company"
+            />
+          </FormField>
 
-            <div>
-              <Label htmlFor="from" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                From (your company name)
-              </Label>
-              <Input
-                id="from"
-                type="text"
-                value={fromCompany}
-                onChange={(e) => setFromCompany(e.target.value)}
-                placeholder="Your Company"
-                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
-              />
-            </div>
+          <FormField label="To (recipient's company name)" htmlFor="to">
+            <StyledInput
+              id="to"
+              type="text"
+              value={toCompany}
+              onChange={(e) => setToCompany(e.target.value)}
+              placeholder="Recipient Company"
+            />
+          </FormField>
 
-            <div>
-              <Label htmlFor="to" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                To (recipient's company name)
-              </Label>
-              <Input
-                id="to"
-                type="text"
-                value={toCompany}
-                onChange={(e) => setToCompany(e.target.value)}
-                placeholder="Recipient Company"
-                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
-              />
-            </div>
+          <FormField label="Discount Rate (%)" htmlFor="discount">
+            <StyledInput
+              id="discount"
+              type="text"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+              placeholder="e.g. 2.5"
+            />
+          </FormField>
 
-            <div>
-              <Label htmlFor="discount" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                Discount Rate (%)
-              </Label>
-              <Input
-                id="discount"
-                type="text"
-                value={discount}
-                onChange={(e) => setDiscount(e.target.value)}
-                placeholder="e.g. 2.5"
-                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
-              />
-            </div>
+          <FormField label="Full Payment Amount" htmlFor="amount">
+            <StyledInput
+              id="amount"
+              type="text"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="$5,000"
+            />
+          </FormField>
 
-            <div>
-              <Label htmlFor="amount" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                Full Payment Amount
-              </Label>
-              <Input
-                id="amount"
-                type="text"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="$5,000"
-                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
-              />
-            </div>
+          <FormField label="Payment Due Date" htmlFor="due-date">
+            <StyledInput
+              id="due-date"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </FormField>
 
-            <div>
-              <Label htmlFor="due-date" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
-                Payment Due Date
-              </Label>
-              <Input
-                id="due-date"
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
-              />
-            </div>
+          <div className="flex items-center justify-between mt-4">
+            <FormField label="Late Payment Offer" htmlFor="late" className="mb-0">
+              <span></span>
+            </FormField>
+            <Switch
+              id="late"
+              checked={latePayment}
+              onCheckedChange={setLatePayment}
+            />
+          </div>
 
-            <div className="flex items-center justify-between mt-4">
-              <Label htmlFor="late" className="text-sm font-medium text-[#2d2d2d]">
-                Late Payment Offer
-              </Label>
-              <Switch
-                id="late"
-                checked={latePayment}
-                onCheckedChange={setLatePayment}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full mt-6 bg-transparent border border-[#2d2d2d] text-[#2d2d2d] font-medium text-[15px] py-3 rounded-[32px] hover:bg-[#2d2d2d] hover:text-white transition-colors duration-300"
-            >
-              Send Offer
-            </Button>
-          </form>
-        </div>
-      </div>
-    </div>
+          <StyledButton type="submit">
+            Send Offer
+          </StyledButton>
+        </StyledForm>
+      </FormCard>
+    </PageContainer>
   );
 };
 
