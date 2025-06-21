@@ -67,53 +67,31 @@ const AcceptanceFlow = () => {
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center text-gray-800 font-semibold",
-                caption_label: "text-sm font-semibold text-gray-800",
+                caption: "flex justify-center pt-1 relative items-center text-white font-semibold",
+                caption_label: "text-sm font-semibold text-white",
                 nav: "space-x-1 flex items-center",
-                nav_button: "h-7 w-7 bg-white/80 border border-gray-300 rounded-md p-0 text-gray-700 hover:bg-white hover:text-gray-900 transition-colors shadow-sm",
+                nav_button: "h-7 w-7 bg-white/20 border border-white/30 rounded-md p-0 text-white hover:bg-white/30 hover:text-white transition-colors shadow-sm",
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse space-y-1",
                 head_row: "flex",
-                head_cell: "text-gray-600 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
+                head_cell: "text-white/70 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
                 row: "flex w-full mt-2",
                 cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12",
-                day: "h-12 w-12 p-0 font-medium text-gray-700 hover:bg-white/30 hover:text-gray-900 rounded-lg transition-colors flex flex-col items-center justify-center text-xs border border-transparent",
-                day_selected: "bg-blue-500 text-white hover:bg-blue-600 hover:text-white border border-blue-600 shadow-md",
-                day_today: "bg-white/50 text-gray-900 border border-gray-400 font-semibold",
-                day_outside: "text-gray-400 opacity-50",
-                day_disabled: "text-gray-300 opacity-30",
+                day: "h-12 w-12 p-0 font-medium text-white hover:bg-white/20 rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
+                day_selected: "bg-white/30 text-white hover:bg-white/40",
+                day_today: "bg-white/10 text-white font-semibold",
+                day_outside: "text-white/40 opacity-50",
+                day_disabled: "text-white/20 opacity-30",
                 day_hidden: "invisible",
-              }}
-              modifiers={{
-                discount: (date) => {
-                  const rate = getDailyRate(date);
-                  return rate.type === 'discount';
-                },
-                premium: (date) => {
-                  const rate = getDailyRate(date);
-                  return rate.type === 'premium';
-                }
-              }}
-              modifiersStyles={{
-                discount: { 
-                  border: '2px solid #22c55e',
-                  color: '#059669',
-                  fontWeight: '600'
-                },
-                premium: { 
-                  border: '2px solid #f59e0b',
-                  color: '#d97706',
-                  fontWeight: '600'
-                }
               }}
               components={{
                 DayContent: ({ date }) => {
                   const rateInfo = getDailyRate(date);
                   return (
                     <div className="flex flex-col items-center justify-center h-full">
-                      <div className="font-semibold">{date.getDate()}</div>
-                      <div className="text-[9px] leading-tight opacity-80">
+                      <div className="font-semibold text-white">{date.getDate()}</div>
+                      <div className="text-[9px] leading-tight text-white/80">
                         {rateInfo.rate}%
                       </div>
                     </div>
@@ -149,16 +127,9 @@ const AcceptanceFlow = () => {
       <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 shadow-xl">
         <h4 className="text-lg font-medium text-white mb-4">Rate Information</h4>
         <div className="space-y-3 text-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-4 h-4 border-2 border-green-500 rounded"></div>
-            <span className="text-white/80">Early payment discount (green border)</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-4 h-4 border-2 border-orange-500 rounded"></div>
-            <span className="text-white/80">Late payment premium (orange border)</span>
-          </div>
-          <p className="text-xs mt-3 text-white/60">
-            Earlier dates offer discounts, later dates may include premiums
+          <p className="text-white/80">Earlier dates offer discounts, later dates may include premiums</p>
+          <p className="text-xs text-white/60">
+            Rates are displayed below each date
           </p>
         </div>
       </div>
