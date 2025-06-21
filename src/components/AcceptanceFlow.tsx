@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
@@ -141,10 +140,10 @@ const AcceptanceFlow = () => {
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse",
                 head_row: "flex mb-2",
-                head_cell: "text-white/60 w-12 font-medium text-xs uppercase tracking-wider text-center",
+                head_cell: "text-white/60 w-14 font-medium text-xs uppercase tracking-wider text-center",
                 row: "flex w-full",
-                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-16 w-12 border-b border-white/10",
-                day: "h-full w-full p-0 font-normal text-white/90 hover:text-white transition-colors flex flex-col items-center justify-center text-xs bg-transparent hover:bg-white/5",
+                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-14 w-14",
+                day: "h-full w-full p-0 font-normal text-white/90 hover:text-white transition-colors flex flex-col items-center justify-center text-xs bg-transparent hover:bg-white/5 rounded-full",
                 day_selected: "text-white",
                 day_today: "text-white font-medium",
                 day_outside: "text-white/30 opacity-50",
@@ -161,16 +160,14 @@ const AcceptanceFlow = () => {
                   
                   return (
                     <div 
-                      className={`flex flex-col items-center justify-center h-full w-full relative ${
+                      className={`flex flex-col items-center justify-center h-full w-full relative rounded-full ${
                         inRange 
                           ? isDue 
-                            ? 'bg-blue-500 text-white' 
-                            : 'bg-blue-500/30 text-white' +
-                              (isStart ? ' rounded-l' : '') +
-                              (isEnd ? ' rounded-r' : '')
+                            ? 'bg-slate-900 text-white' 
+                            : 'bg-slate-700 text-white'
                           : ''
                       } ${
-                        isDue && !inRange ? 'bg-blue-500 text-white rounded' : ''
+                        isDue && !inRange ? 'bg-slate-900 text-white' : ''
                       }`}
                     >
                       <div className="font-medium text-sm leading-none mb-1">{date.getDate()}</div>
