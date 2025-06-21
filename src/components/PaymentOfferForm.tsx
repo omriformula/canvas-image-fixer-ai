@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
 
 const PaymentOfferForm = () => {
@@ -34,12 +35,14 @@ const PaymentOfferForm = () => {
   return (
     <div className="bg-[#f3f2ed] min-h-screen py-10 px-4">
       <div className="max-w-[460px] mx-auto">
-        {/* Hero Image - completely separate */}
-        <img 
-          src="/lovable-uploads/838a1349-55fb-4cc8-aea2-51a09d22f300.png" 
-          alt="Hero Image"
-          className="w-full h-auto rounded-t-3xl block"
-        />
+        {/* Hero Image - 16:9 aspect ratio */}
+        <AspectRatio ratio={16 / 9} className="rounded-t-3xl overflow-hidden">
+          <img 
+            src="/lovable-uploads/838a1349-55fb-4cc8-aea2-51a09d22f300.png" 
+            alt="Hero Image"
+            className="w-full h-full object-cover"
+          />
+        </AspectRatio>
         
         {/* Form Container - separate from image */}
         <div className="bg-white rounded-b-3xl shadow-lg p-6">
