@@ -28,7 +28,7 @@ const LeadCapture = () => {
   return (
     <PageContainer>
       <FormCard 
-        title="Get AcceptanceFlow Integration"
+        title="Share access with Eli"
         heroImage="/lovable-uploads/e0d33fe8-6348-4e32-83f2-01f518339b1b.png"
         heroAlt="Payment Acceptance Flow Preview"
       >
