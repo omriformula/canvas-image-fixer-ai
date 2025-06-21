@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import { StyledButton, StyledForm } from '@/design-system';
-
 const AcceptanceFlow = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [paymentAmount] = useState('$10,000');
@@ -46,7 +45,7 @@ const AcceptanceFlow = () => {
   return <div className="space-y-6">
       {/* Main Payment Card with Glassmorphism */}
       <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-3xl p-8 shadow-2xl">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 px-0 mx-[83px]">
           <h3 className="text-2xl font-medium text-white mb-4">
             Payment Acceptance
           </h3>
@@ -63,7 +62,7 @@ const AcceptanceFlow = () => {
 
         <StyledForm onSubmit={handleSchedulePayment}>
           <div className="mb-8 flex justify-center">
-            <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4" classNames={{
+            <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} classNames={{
             months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
             month: "space-y-4",
             caption: "flex justify-center pt-1 relative items-center text-white font-semibold",
@@ -95,7 +94,7 @@ const AcceptanceFlow = () => {
                       </div>
                     </div>;
             }
-          }} />
+          }} className="rounded-2xl border border-white/20 backdrop-blur-sm p-4 bg-white/0" />
           </div>
 
           {selectedDate && <div className="mb-6 p-4 rounded-2xl text-center bg-white/10 backdrop-blur-sm border border-white/20">
@@ -108,7 +107,7 @@ const AcceptanceFlow = () => {
             </div>}
 
           <div className="flex justify-center">
-            <button type="submit" className="bg-white/20 hover:bg-white/30 text-white border border-white/30 hover:border-white/50 px-8 py-3 rounded-full font-medium transition-all duration-200 backdrop-blur-sm">
+            <button type="submit" className="border border-white/30 hover:border-white/50 py-3 rounded-full font-medium transition-all duration-200 backdrop-blur-sm text-slate-50 bg-slate-900 hover:bg-slate-800 px-[90px]">
               Schedule Payment
             </button>
           </div>
@@ -117,10 +116,10 @@ const AcceptanceFlow = () => {
 
       {/* Rate Legend with Glassmorphism */}
       <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 shadow-xl">
-        <h4 className="text-lg font-medium text-white mb-4">Rate Information</h4>
+        <h4 className="text-lg font-medium mb-4 text-black/[0.63]">Rate Information</h4>
         <div className="space-y-3 text-sm">
-          <p className="text-white/80">Earlier dates offer discounts, later dates may include premiums</p>
-          <p className="text-xs text-white/60">
+          <p className="text-slate-800">Earlier dates offer discounts, later dates may include premiums</p>
+          <p className="text-xs text-slate-900">
             Rates are displayed below each date
           </p>
         </div>
