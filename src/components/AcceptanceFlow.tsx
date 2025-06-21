@@ -67,22 +67,22 @@ const AcceptanceFlow = () => {
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center text-white font-medium",
-                caption_label: "text-sm font-medium text-white",
+                caption: "flex justify-center pt-1 relative items-center text-gray-800 font-semibold",
+                caption_label: "text-sm font-semibold text-gray-800",
                 nav: "space-x-1 flex items-center",
-                nav_button: "h-7 w-7 bg-white/10 border border-white/20 rounded-md p-0 text-white hover:bg-white/20 hover:text-white transition-colors",
+                nav_button: "h-7 w-7 bg-white/80 border border-gray-300 rounded-md p-0 text-gray-700 hover:bg-white hover:text-gray-900 transition-colors shadow-sm",
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse space-y-1",
                 head_row: "flex",
-                head_cell: "text-white/60 rounded-md w-12 font-normal text-xs uppercase tracking-wide",
+                head_cell: "text-gray-600 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
                 row: "flex w-full mt-2",
                 cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12",
-                day: "h-12 w-12 p-0 font-normal text-white hover:bg-white/20 hover:text-white rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
-                day_selected: "bg-white/30 text-white hover:bg-white/40 hover:text-white border border-white/40",
-                day_today: "bg-white/10 text-white border border-white/30",
-                day_outside: "text-white/30 opacity-50",
-                day_disabled: "text-white/20 opacity-30",
+                day: "h-12 w-12 p-0 font-medium text-gray-700 hover:bg-white/30 hover:text-gray-900 rounded-lg transition-colors flex flex-col items-center justify-center text-xs border border-transparent",
+                day_selected: "bg-blue-500 text-white hover:bg-blue-600 hover:text-white border border-blue-600 shadow-md",
+                day_today: "bg-white/50 text-gray-900 border border-gray-400 font-semibold",
+                day_outside: "text-gray-400 opacity-50",
+                day_disabled: "text-gray-300 opacity-30",
                 day_hidden: "invisible",
               }}
               modifiers={{
@@ -97,14 +97,14 @@ const AcceptanceFlow = () => {
               }}
               modifiersStyles={{
                 discount: { 
-                  backgroundColor: 'rgba(34, 197, 94, 0.2)', 
-                  border: '1px solid rgba(34, 197, 94, 0.4)',
-                  color: '#ffffff'
+                  border: '2px solid #22c55e',
+                  color: '#059669',
+                  fontWeight: '600'
                 },
                 premium: { 
-                  backgroundColor: 'rgba(251, 191, 36, 0.2)', 
-                  border: '1px solid rgba(251, 191, 36, 0.4)',
-                  color: '#ffffff'
+                  border: '2px solid #f59e0b',
+                  color: '#d97706',
+                  fontWeight: '600'
                 }
               }}
               components={{
@@ -112,8 +112,8 @@ const AcceptanceFlow = () => {
                   const rateInfo = getDailyRate(date);
                   return (
                     <div className="flex flex-col items-center justify-center h-full">
-                      <div className="text-white font-medium">{date.getDate()}</div>
-                      <div className="text-white/70 text-[10px] leading-tight">
+                      <div className="font-semibold">{date.getDate()}</div>
+                      <div className="text-[9px] leading-tight opacity-80">
                         {rateInfo.rate}%
                       </div>
                     </div>
@@ -150,12 +150,12 @@ const AcceptanceFlow = () => {
         <h4 className="text-lg font-medium text-white mb-4">Rate Information</h4>
         <div className="space-y-3 text-sm">
           <div className="flex items-center gap-3">
-            <div className="w-4 h-4 bg-green-400/40 border border-green-400/60 rounded"></div>
-            <span className="text-white/80">Early payment discount (green dates)</span>
+            <div className="w-4 h-4 border-2 border-green-500 rounded"></div>
+            <span className="text-white/80">Early payment discount (green border)</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-4 h-4 bg-yellow-400/40 border border-yellow-400/60 rounded"></div>
-            <span className="text-white/80">Late payment premium (yellow dates)</span>
+            <div className="w-4 h-4 border-2 border-orange-500 rounded"></div>
+            <span className="text-white/80">Late payment premium (orange border)</span>
           </div>
           <p className="text-xs mt-3 text-white/60">
             Earlier dates offer discounts, later dates may include premiums
