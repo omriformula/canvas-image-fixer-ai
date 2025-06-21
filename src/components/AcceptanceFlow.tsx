@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import { StyledButton, StyledForm } from '@/design-system';
+
 const AcceptanceFlow = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [paymentAmount] = useState('$10,000');
@@ -68,19 +69,19 @@ const AcceptanceFlow = () => {
             caption: "flex justify-center pt-1 relative items-center text-white font-semibold",
             caption_label: "text-sm font-semibold text-white",
             nav: "space-x-1 flex items-center",
-            nav_button: "h-7 w-7 bg-white/20 border border-white/30 rounded-md p-0 text-white hover:bg-white/30 hover:text-white transition-colors shadow-sm",
+            nav_button: "h-7 w-7 bg-white/20 border border-white/30 rounded-md p-0 text-white hover:bg-white/30 transition-colors shadow-sm",
             nav_button_previous: "absolute left-1",
             nav_button_next: "absolute right-1",
             table: "w-full border-collapse space-y-1",
             head_row: "flex",
-            head_cell: "text-white/70 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
+            head_cell: "text-gray-700 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
             row: "flex w-full mt-2",
             cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12",
-            day: "h-12 w-12 p-0 font-medium text-white hover:bg-white/20 rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
-            day_selected: "bg-white/30 text-white hover:bg-white/40",
-            day_today: "bg-white/10 text-white font-semibold",
-            day_outside: "text-white/40 opacity-50",
-            day_disabled: "text-white/20 opacity-30",
+            day: "h-12 w-12 p-0 font-medium text-gray-700 hover:text-gray-900 rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
+            day_selected: "text-white",
+            day_today: "text-gray-800 font-semibold",
+            day_outside: "text-gray-400 opacity-50",
+            day_disabled: "text-gray-300 opacity-30",
             day_hidden: "invisible"
           }} components={{
             DayContent: ({
@@ -88,8 +89,8 @@ const AcceptanceFlow = () => {
             }) => {
               const rateInfo = getDailyRate(date);
               return <div className="flex flex-col items-center justify-center h-full">
-                      <div className="font-semibold text-black ">{date.getDate()}</div>
-                      <div className="text-[9px] leading-tight text-white/80">
+                      <div className="font-semibold text-gray-800">{date.getDate()}</div>
+                      <div className="text-[9px] leading-tight text-black">
                         {rateInfo.rate}%
                       </div>
                     </div>;
