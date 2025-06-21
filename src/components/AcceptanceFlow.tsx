@@ -10,21 +10,47 @@ const AcceptanceFlow = () => {
   // Mock data for daily rates (in real app, this would come from your backend)
   const getDailyRate = (date: Date) => {
     const day = date.getDate();
-    // Sample rates - earlier dates have higher discounts, later dates have premiums
-    if (day <= 10) return {
-      rate: (4.0 - day * 0.3).toFixed(1),
-      type: 'discount'
-    };
-    if (day <= 20) return {
-      rate: (3.0 - (day - 10) * 0.2).toFixed(1),
-      type: 'discount'
-    };
-    if (day <= 25) return {
-      rate: (1.0 - (day - 20) * 0.2).toFixed(1),
-      type: 'discount'
-    };
+    
+    // Due date is the 25th - before this date, there are discounts
+    if (day <= 10) {
+      return {
+        rate: (4.0 - day * 0.3).toFixed(1),
+        type: 'discount'
+      };
+    }
+    if (day <= 20) {
+      return {
+        rate: (3.0 - (day - 10) * 0.2).toFixed(1),
+        type: 'discount'
+      };
+    }
+    if (day <= 25) {
+      // Days 21-25: Small discounts approaching due date
+      return {
+        rate: (1.0 - (day - 20) * 0.15).toFixed(1),
+        type: 'discount'
+      };
+    }
+    
+    // After 25th: Late payment penalties
+    const daysLate = day - 25;
+    let rate;
+    
+    if (daysLate <= 7) {
+      // First week late: 0% to 1.5%
+      rate = (daysLate * 1.5 / 7).toFixed(1);
+    } else {
+      // Second week late: 1.5% to 2.5%
+      const additionalDays = daysLate - 7;
+      rate = (1.5 + (additionalDays * 1.0 / 7)).toFixed(1);
+      // Cap at 2.5% for anything beyond 2 weeks
+      if (parseFloat(rate) > 2.5) {
+        rate = '2.5';
+      }
+    }
+    
     return {
-      rate: ((day - 25) * 0.2).toFixed(1),
+      rate,
       type: 'premium'
     };
   };
@@ -118,9 +144,9 @@ const AcceptanceFlow = () => {
       <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 shadow-xl">
         <h4 className="text-lg font-medium mb-4 text-black/[0.63]">Rate Information</h4>
         <div className="space-y-3 text-sm">
-          <p className="text-slate-800">Earlier dates offer discounts, later dates may include premiums</p>
+          <p className="text-slate-800">Due date: 25th of the month. Earlier dates offer discounts, later dates include late payment penalties</p>
           <p className="text-xs text-slate-900">
-            Rates are displayed below each date
+            Late payments: 1.5% after 1 week, 2.5% after 2 weeks
           </p>
         </div>
       </div>
