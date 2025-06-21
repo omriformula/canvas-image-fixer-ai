@@ -43,13 +43,16 @@ const AcceptanceFlow = () => {
 
   return (
     <div className="space-y-6">
-      <FormCard title="Select a payment date">
+      <FormCard title="Payment Acceptance">
         <div className="text-center mb-6">
-          <p className="text-sm text-gray-600 mb-2">
-            provided to you by <strong>{companyName}</strong>
+          <p className="text-sm mb-2" style={{ color: '#2d2d2d' }}>
+            Payment request from <strong>{companyName}</strong>
           </p>
-          <p className="text-lg font-medium">
-            Payment Amount: {paymentAmount}
+          <p className="text-lg font-medium" style={{ color: '#1a1a1a' }}>
+            Amount: {paymentAmount}
+          </p>
+          <p className="text-sm mt-2" style={{ color: '#2d2d2d' }}>
+            Select your preferred payment date below
           </p>
         </div>
 
@@ -99,11 +102,11 @@ const AcceptanceFlow = () => {
           </div>
 
           {selectedDate && (
-            <div className="mb-4 p-3 bg-blue-50 rounded-lg text-center">
-              <p className="text-sm text-blue-800">
+            <div className="mb-4 p-3 rounded-lg text-center" style={{ backgroundColor: '#f3f2ed' }}>
+              <p className="text-sm font-medium" style={{ color: '#1a1a1a' }}>
                 Selected: {selectedDate.toLocaleDateString()}
               </p>
-              <p className="text-sm text-blue-600">
+              <p className="text-sm mt-1" style={{ color: '#2d2d2d' }}>
                 Rate: {getDailyRate(selectedDate).rate}% {getDailyRate(selectedDate).type}
               </p>
             </div>
@@ -113,23 +116,22 @@ const AcceptanceFlow = () => {
             Schedule Payment
           </StyledButton>
         </StyledForm>
-
-        <div className="mt-4 text-center text-xs text-gray-500">
-          Powered by formula
-        </div>
       </FormCard>
 
-      {/* Legend */}
-      <FormCard title="Rate Legend">
-        <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2">
+      {/* Rate Legend */}
+      <FormCard title="Rate Information">
+        <div className="space-y-3 text-sm">
+          <div className="flex items-center gap-3">
             <div className="w-4 h-4 bg-green-200 rounded"></div>
-            <span>Early payment discount (green dates)</span>
+            <span style={{ color: '#2d2d2d' }}>Early payment discount (green dates)</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className="w-4 h-4 bg-yellow-200 rounded"></div>
-            <span>Late payment premium (yellow dates)</span>
+            <span style={{ color: '#2d2d2d' }}>Late payment premium (yellow dates)</span>
           </div>
+          <p className="text-xs mt-3" style={{ color: '#2d2d2d' }}>
+            Earlier dates offer discounts, later dates may include premiums
+          </p>
         </div>
       </FormCard>
     </div>
