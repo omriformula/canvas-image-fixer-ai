@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,14 +31,16 @@ const PaymentOfferForm = () => {
 
   return (
     <div className="bg-[#f3f2ed] min-h-screen py-10 px-4">
-      <div className="max-w-[460px] mx-auto">
-        <img 
-          src="/lovable-uploads/52d08a01-376c-4bd3-b712-294f7355efdc.png" 
-          alt="Hero Image"
-          className="w-full h-auto rounded-t-3xl"
-        />
+      <div className="max-w-[460px] mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div className="w-full">
+          <img 
+            src="/lovable-uploads/52d08a01-376c-4bd3-b712-294f7355efdc.png" 
+            alt="Hero Image"
+            className="w-full h-auto block"
+          />
+        </div>
         
-        <div className="bg-white rounded-b-3xl shadow-lg p-6">
+        <div className="p-6">
           <h3 className="text-xl font-medium mb-6 text-[#1a1a1a] font-['Work_Sans']">
             Create a Payment Offer
           </h3>
