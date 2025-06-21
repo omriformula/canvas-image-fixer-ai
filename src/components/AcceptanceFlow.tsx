@@ -94,7 +94,7 @@ const AcceptanceFlow = () => {
                       </div>
                     </div>;
             }
-          }} className="rounded-2xl border border-white/20 backdrop-blur-sm p-4 bg-transparent" />
+          }} className="rounded-2xl border border-transparent/20 backdrop-blur-sm p-4 bg-transparent " />
           </div>
 
           {selectedDate && <div className="mb-6 p-4 rounded-2xl text-center bg-white/10 backdrop-blur-sm border border-white/20">
