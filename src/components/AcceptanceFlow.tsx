@@ -58,12 +58,33 @@ const AcceptanceFlow = () => {
         </div>
 
         <StyledForm onSubmit={handleSchedulePayment}>
-          <div className="mb-8">
+          <div className="mb-8 flex justify-center">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm mx-auto p-4"
+              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4"
+              classNames={{
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                month: "space-y-4",
+                caption: "flex justify-center pt-1 relative items-center text-white font-medium",
+                caption_label: "text-sm font-medium text-white",
+                nav: "space-x-1 flex items-center",
+                nav_button: "h-7 w-7 bg-white/10 border border-white/20 rounded-md p-0 text-white hover:bg-white/20 hover:text-white transition-colors",
+                nav_button_previous: "absolute left-1",
+                nav_button_next: "absolute right-1",
+                table: "w-full border-collapse space-y-1",
+                head_row: "flex",
+                head_cell: "text-white/60 rounded-md w-12 font-normal text-xs uppercase tracking-wide",
+                row: "flex w-full mt-2",
+                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12",
+                day: "h-12 w-12 p-0 font-normal text-white hover:bg-white/20 hover:text-white rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
+                day_selected: "bg-white/30 text-white hover:bg-white/40 hover:text-white border border-white/40",
+                day_today: "bg-white/10 text-white border border-white/30",
+                day_outside: "text-white/30 opacity-50",
+                day_disabled: "text-white/20 opacity-30",
+                day_hidden: "invisible",
+              }}
               modifiers={{
                 discount: (date) => {
                   const rate = getDailyRate(date);
@@ -76,25 +97,23 @@ const AcceptanceFlow = () => {
               }}
               modifiersStyles={{
                 discount: { 
-                  backgroundColor: 'rgba(34, 197, 94, 0.3)', 
-                  color: '#ffffff',
-                  fontWeight: '500',
-                  border: '1px solid rgba(34, 197, 94, 0.5)'
+                  backgroundColor: 'rgba(34, 197, 94, 0.2)', 
+                  border: '1px solid rgba(34, 197, 94, 0.4)',
+                  color: '#ffffff'
                 },
                 premium: { 
-                  backgroundColor: 'rgba(251, 191, 36, 0.3)', 
-                  color: '#ffffff',
-                  fontWeight: '500',
-                  border: '1px solid rgba(251, 191, 36, 0.5)'
+                  backgroundColor: 'rgba(251, 191, 36, 0.2)', 
+                  border: '1px solid rgba(251, 191, 36, 0.4)',
+                  color: '#ffffff'
                 }
               }}
               components={{
                 DayContent: ({ date }) => {
                   const rateInfo = getDailyRate(date);
                   return (
-                    <div className="text-center">
-                      <div className="text-white">{date.getDate()}</div>
-                      <div className="text-xs text-white/80">
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <div className="text-white font-medium">{date.getDate()}</div>
+                      <div className="text-white/70 text-[10px] leading-tight">
                         {rateInfo.rate}%
                       </div>
                     </div>
