@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { PageContainer, FormCard, FormField, StyledInput, StyledButton, StyledForm } from '@/design-system';
 import { useToast } from '@/hooks/use-toast';
@@ -28,8 +29,8 @@ const LeadCapture = () => {
     <PageContainer>
       <FormCard 
         title="Share access with Eli" 
-        heroImage="/lovable-uploads/e0d33fe8-6348-4e32-83f2-01f518339b1b.png" 
-        heroAlt="Payment Acceptance Flow Preview"
+        heroImage="/lovable-uploads/79eb6228-916f-4f9d-811b-563c4803553b.png" 
+        heroAlt="Blue sky with clouds"
       >
         <div className="mb-6 text-center">
           <p className="text-gray-600 mb-4 text-left">@Eleanor wants to boost the design of a few screens - without taking any of your time!</p>
