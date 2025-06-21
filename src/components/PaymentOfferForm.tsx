@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,7 +36,7 @@ const PaymentOfferForm = () => {
       <div className="max-w-[460px] mx-auto">
         {/* Hero Image - completely separate */}
         <img 
-          src="/lovable-uploads/52d08a01-376c-4bd3-b712-294f7355efdc.png" 
+          src="/lovable-uploads/838a1349-55fb-4cc8-aea2-51a09d22f300.png" 
           alt="Hero Image"
           className="w-full h-auto rounded-t-3xl block"
         />
@@ -156,3 +157,4 @@ const PaymentOfferForm = () => {
 };
 
 export default PaymentOfferForm;
+
