@@ -1,15 +1,15 @@
 
-import PaymentOfferForm from '@/components/PaymentOfferForm';
+import DashboardOverview from '@/components/DashboardOverview';
 import Navigation from '@/components/Navigation';
 import { PageContainer } from '@/design-system';
 
-const Index = () => {
+const Dashboard = () => {
   return (
     <PageContainer>
       <Navigation />
-      <PaymentOfferForm />
+      <DashboardOverview />
     </PageContainer>
   );
 };
 
-export default Index;
+export default Dashboard;

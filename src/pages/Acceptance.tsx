@@ -1,15 +1,15 @@
 
-import PaymentOfferForm from '@/components/PaymentOfferForm';
+import AcceptanceFlow from '@/components/AcceptanceFlow';
 import Navigation from '@/components/Navigation';
 import { PageContainer } from '@/design-system';
 
-const Index = () => {
+const Acceptance = () => {
   return (
     <PageContainer>
       <Navigation />
-      <PaymentOfferForm />
+      <AcceptanceFlow />
     </PageContainer>
   );
 };
 
-export default Index;
+export default Acceptance;

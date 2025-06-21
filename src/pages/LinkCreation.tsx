@@ -1,15 +1,15 @@
 
-import PaymentOfferForm from '@/components/PaymentOfferForm';
+import LinkCreationForm from '@/components/LinkCreationForm';
 import Navigation from '@/components/Navigation';
 import { PageContainer } from '@/design-system';
 
-const Index = () => {
+const LinkCreation = () => {
   return (
     <PageContainer>
       <Navigation />
-      <PaymentOfferForm />
+      <LinkCreationForm />
     </PageContainer>
   );
 };
 
-export default Index;
+export default LinkCreation;
