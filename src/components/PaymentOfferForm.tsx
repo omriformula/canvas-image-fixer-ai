@@ -31,15 +31,15 @@ const PaymentOfferForm = () => {
   };
 
   return (
-    <div className="bg-[#f3f2ed] min-h-screen flex justify-center items-start py-10 px-4">
-      <div className="bg-white rounded-3xl shadow-lg overflow-hidden max-w-[460px] w-full">
+    <div className="bg-[#f3f2ed] min-h-screen py-10 px-4">
+      <div className="max-w-[460px] mx-auto">
         <img 
           src="/lovable-uploads/52d08a01-376c-4bd3-b712-294f7355efdc.png" 
-          alt="Header Image"
-          className="w-full h-auto block"
+          alt="Hero Image"
+          className="w-full h-auto rounded-t-3xl"
         />
         
-        <div className="p-6">
+        <div className="bg-white rounded-b-3xl shadow-lg p-6">
           <h3 className="text-xl font-medium mb-6 text-[#1a1a1a] font-['Work_Sans']">
             Create a Payment Offer
           </h3>
