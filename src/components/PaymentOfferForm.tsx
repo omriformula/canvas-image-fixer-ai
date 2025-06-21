@@ -3,127 +3,151 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 
 const PaymentOfferForm = () => {
-  const [amount, setAmount] = useState('5,000');
-  const [discount, setDiscount] = useState('2.5');
-  const [dueDate, setDueDate] = useState<Date>();
+  const [recipient, setRecipient] = useState('');
+  const [fromCompany, setFromCompany] = useState('');
+  const [toCompany, setToCompany] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [amount, setAmount] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [latePayment, setLatePayment] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!dueDate) {
-      toast.error('Please select a due date');
-      return;
-    }
-
     toast.success('Payment offer sent successfully!');
     console.log('Payment offer submitted:', {
-      amount,
+      recipient,
+      fromCompany,
+      toCompany,
       discount,
-      dueDate: format(dueDate, 'dd/MM/yyyy')
+      amount,
+      dueDate,
+      latePayment
     });
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-md mx-auto">
-      {/* Hero Image Section */}
-      <div className="relative h-64 overflow-hidden">
+    <div className="bg-[#f3f2ed] min-h-screen flex justify-center items-start py-10 px-4">
+      <div className="bg-white rounded-3xl shadow-lg overflow-hidden max-w-[460px] w-full">
         <img 
           src="/lovable-uploads/52d08a01-376c-4bd3-b712-294f7355efdc.png" 
-          alt="Mountain landscape with river at sunset"
-          className="w-full h-full object-cover"
+          alt="Header Image"
+          className="w-full h-auto block"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-      </div>
+        
+        <div className="p-6">
+          <h3 className="text-xl font-medium mb-6 text-[#1a1a1a] font-['Work_Sans']">
+            Create a Payment Offer
+          </h3>
 
-      {/* Form Section */}
-      <div className="p-8 space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900 text-center mb-8">
-          Create a Payment Offer
-        </h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="recipient" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                Who will receive the offer?
+              </Label>
+              <Select value={recipient} onValueChange={setRecipient}>
+                <SelectTrigger className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white">
+                  <SelectValue placeholder="Select recipient" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="vendor">Vendor</SelectItem>
+                  <SelectItem value="customer">Customer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Amount Field */}
-          <div className="space-y-2">
-            <Label htmlFor="amount" className="text-sm font-medium text-gray-700">
-              Amount
-            </Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
-                $
-              </span>
+            <div>
+              <Label htmlFor="from" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                From (your company name)
+              </Label>
+              <Input
+                id="from"
+                type="text"
+                value={fromCompany}
+                onChange={(e) => setFromCompany(e.target.value)}
+                placeholder="Your Company"
+                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="to" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                To (recipient's company name)
+              </Label>
+              <Input
+                id="to"
+                type="text"
+                value={toCompany}
+                onChange={(e) => setToCompany(e.target.value)}
+                placeholder="Recipient Company"
+                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="discount" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                Discount Rate (%)
+              </Label>
+              <Input
+                id="discount"
+                type="text"
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+                placeholder="e.g. 2.5"
+                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="amount" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                Full Payment Amount
+              </Label>
               <Input
                 id="amount"
                 type="text"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="pl-8 h-12 text-lg bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="0"
+                placeholder="$5,000"
+                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
               />
             </div>
-          </div>
 
-          {/* Discount Field */}
-          <div className="space-y-2">
-            <Label htmlFor="discount" className="text-sm font-medium text-gray-700">
-              Discount (%)
-            </Label>
-            <Input
-              id="discount"
-              type="text"
-              value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
-              className="h-12 text-lg bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="0"
-            />
-          </div>
+            <div>
+              <Label htmlFor="due-date" className="block text-sm font-medium mb-1.5 text-[#2d2d2d]">
+                Payment Due Date
+              </Label>
+              <Input
+                id="due-date"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="w-full p-3.5 text-base rounded-xl border-[#e2e2e2] bg-white"
+              />
+            </div>
 
-          {/* Due Date Field */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              Select Due Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full h-12 text-lg bg-gray-50 border-gray-200 rounded-xl justify-start text-left font-normal hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                    !dueDate && "text-gray-500"
-                  )}
-                >
-                  <CalendarIcon className="mr-3 h-5 w-5" />
-                  {dueDate ? format(dueDate, "dd/MM/yyyy") : "dd/mm/yyyy"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dueDate}
-                  onSelect={setDueDate}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                  disabled={(date) => date < new Date()}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+            <div className="flex items-center justify-between mt-4">
+              <Label htmlFor="late" className="text-sm font-medium text-[#2d2d2d]">
+                Late Payment Offer
+              </Label>
+              <Switch
+                id="late"
+                checked={latePayment}
+                onCheckedChange={setLatePayment}
+              />
+            </div>
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full h-12 text-lg font-semibold bg-gray-900 hover:bg-gray-800 text-white rounded-xl transition-colors duration-200 mt-8"
-          >
-            Send Offer
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="w-full mt-6 bg-transparent border border-[#2d2d2d] text-[#2d2d2d] font-medium text-[15px] py-3 rounded-[32px] hover:bg-[#2d2d2d] hover:text-white transition-colors duration-300"
+            >
+              Send Offer
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
