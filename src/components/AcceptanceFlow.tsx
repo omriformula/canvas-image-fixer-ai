@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import { StyledButton, StyledForm } from '@/design-system';
-
 const AcceptanceFlow = () => {
   // Set 25th of current month as default due date
   const currentDate = new Date();
   const dueDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 25);
-  
   const [selectedDate, setSelectedDate] = useState<Date>(dueDate);
   const [paymentAmount] = useState('$10,000');
   const [companyName] = useState('Example Company');
@@ -15,7 +13,7 @@ const AcceptanceFlow = () => {
   // Mock data for daily rates (in real app, this would come from your backend)
   const getDailyRate = (date: Date) => {
     const day = date.getDate();
-    
+
     // Due date is the 25th - before this date, there are discounts
     if (day < 25) {
       // Early payment discounts: higher discounts for earlier dates
@@ -37,7 +35,6 @@ const AcceptanceFlow = () => {
         };
       }
     }
-    
     if (day === 25) {
       // Due date - no discount or penalty
       return {
@@ -45,30 +42,27 @@ const AcceptanceFlow = () => {
         type: 'due'
       };
     }
-    
+
     // After 25th: Late payment penalties
     const daysLate = day - 25;
     let rate;
-    
     if (daysLate <= 7) {
       // First week late: 0% to 1.5%
       rate = (daysLate * 1.5 / 7).toFixed(1);
     } else {
       // Second week late: 1.5% to 2.5%
       const additionalDays = Math.min(daysLate - 7, 7);
-      rate = (1.5 + (additionalDays * 1.0 / 7)).toFixed(1);
+      rate = (1.5 + additionalDays * 1.0 / 7).toFixed(1);
       // Cap at 2.5% for anything beyond 2 weeks
       if (parseFloat(rate) > 2.5) {
         rate = '2.5';
       }
     }
-    
     return {
       rate,
       type: 'penalty'
     };
   };
-
   const handleSchedulePayment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDate) {
@@ -87,30 +81,24 @@ const AcceptanceFlow = () => {
   // Check if a date is in the selected range (from due date to selected date or vice versa)
   const isInRange = (date: Date) => {
     if (!selectedDate) return false;
-    
     const dateTime = date.getTime();
     const dueDateTime = dueDate.getTime();
     const selectedDateTime = selectedDate.getTime();
-    
     const startTime = Math.min(dueDateTime, selectedDateTime);
     const endTime = Math.max(dueDateTime, selectedDateTime);
-    
     return dateTime >= startTime && dateTime <= endTime;
   };
-
   const isRangeStart = (date: Date) => {
     if (!selectedDate) return false;
     return date.getTime() === Math.min(dueDate.getTime(), selectedDate.getTime());
   };
-
   const isRangeEnd = (date: Date) => {
     if (!selectedDate) return false;
     return date.getTime() === Math.max(dueDate.getTime(), selectedDate.getTime());
   };
-
   return <div className="space-y-6">
       {/* Main Payment Card with Glassmorphism */}
-      <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-3xl p-8 shadow-2xl">
+      <div className="backdrop-blur-md border border-white/30 rounded-3xl p-8 shadow-2xl bg-white/0">
         <div className="text-center mb-8 px-0 mx-[83px]">
           <p className="text-white/80 mb-2">
             Payment request from <strong className="text-white">{companyName}</strong>
@@ -125,64 +113,44 @@ const AcceptanceFlow = () => {
 
         <StyledForm onSubmit={handleSchedulePayment}>
           <div className="mb-8 flex justify-center">
-            <Calendar 
-              mode="single" 
-              selected={selectedDate} 
-              onSelect={setSelectedDate} 
-              classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center text-white/80 font-medium mb-4",
-                caption_label: "text-sm font-medium text-white/80",
-                nav: "space-x-1 flex items-center",
-                nav_button: "h-7 w-7 bg-white/10 border border-white/20 rounded-md p-0 text-white/60 hover:bg-white/20 transition-colors",
-                nav_button_previous: "absolute left-1",
-                nav_button_next: "absolute right-1",
-                table: "w-full border-collapse",
-                head_row: "flex mb-2",
-                head_cell: "text-white/60 w-14 font-medium text-xs uppercase tracking-wider text-center",
-                row: "flex w-full",
-                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-14 w-14",
-                day: "h-full w-full p-0 font-normal text-white/90 hover:text-white transition-colors flex flex-col items-center justify-center text-xs bg-transparent hover:bg-white/5 rounded-full",
-                day_selected: "text-white",
-                day_today: "text-white font-medium",
-                day_outside: "text-white/30 opacity-50",
-                day_disabled: "text-white/20 opacity-30",
-                day_hidden: "invisible"
-              }} 
-              components={{
-                DayContent: ({ date }) => {
-                  const rateInfo = getDailyRate(date);
-                  const inRange = isInRange(date);
-                  const isStart = isRangeStart(date);
-                  const isEnd = isRangeEnd(date);
-                  const isDue = date.getDate() === 25;
-                  
-                  return (
-                    <div 
-                      className={`flex flex-col items-center justify-center h-full w-full relative rounded-full ${
-                        inRange 
-                          ? isDue 
-                            ? 'bg-slate-900 text-white' 
-                            : 'bg-slate-700 text-white'
-                          : ''
-                      } ${
-                        isDue && !inRange ? 'bg-slate-900 text-white' : ''
-                      }`}
-                    >
+            <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} classNames={{
+            months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+            month: "space-y-4",
+            caption: "flex justify-center pt-1 relative items-center text-white/80 font-medium mb-4",
+            caption_label: "text-sm font-medium text-white/80",
+            nav: "space-x-1 flex items-center",
+            nav_button: "h-7 w-7 bg-white/10 border border-white/20 rounded-md p-0 text-white/60 hover:bg-white/20 transition-colors",
+            nav_button_previous: "absolute left-1",
+            nav_button_next: "absolute right-1",
+            table: "w-full border-collapse",
+            head_row: "flex mb-2",
+            head_cell: "text-white/60 w-14 font-medium text-xs uppercase tracking-wider text-center",
+            row: "flex w-full",
+            cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-14 w-14",
+            day: "h-full w-full p-0 font-normal text-white/90 hover:text-white transition-colors flex flex-col items-center justify-center text-xs bg-transparent hover:bg-white/5 rounded-full",
+            day_selected: "text-white",
+            day_today: "text-white font-medium",
+            day_outside: "text-white/30 opacity-50",
+            day_disabled: "text-white/20 opacity-30",
+            day_hidden: "invisible"
+          }} components={{
+            DayContent: ({
+              date
+            }) => {
+              const rateInfo = getDailyRate(date);
+              const inRange = isInRange(date);
+              const isStart = isRangeStart(date);
+              const isEnd = isRangeEnd(date);
+              const isDue = date.getDate() === 25;
+              return <div className={`flex flex-col items-center justify-center h-full w-full relative rounded-full ${inRange ? isDue ? 'bg-slate-900 text-white' : 'bg-slate-700 text-white' : ''} ${isDue && !inRange ? 'bg-slate-900 text-white' : ''}`}>
                       <div className="font-medium text-sm leading-none mb-1">{date.getDate()}</div>
                       <div className="text-[10px] leading-none opacity-90">
                         {rateInfo.rate}%
                       </div>
-                      {isDue && (
-                        <div className="text-[8px] font-bold leading-none mt-0.5 opacity-80">DUE</div>
-                      )}
-                    </div>
-                  );
-                }
-              }} 
-              className="rounded-2xl border border-white/20 backdrop-blur-sm p-6 bg-white/10" 
-            />
+                      {isDue && <div className="text-[8px] font-bold leading-none mt-0.5 opacity-80">DUE</div>}
+                    </div>;
+            }
+          }} className="rounded-2xl border border-white/20 backdrop-blur-sm p-6 bg-white/0" />
           </div>
 
           {selectedDate && <div className="mb-6 p-4 rounded-2xl text-center bg-white/10 backdrop-blur-sm border border-white/20">
@@ -192,11 +160,9 @@ const AcceptanceFlow = () => {
               <p className="text-white/80 text-sm mt-1">
                 Rate: {getDailyRate(selectedDate).rate}% {getDailyRate(selectedDate).type}
               </p>
-              {selectedDate.getTime() !== dueDate.getTime() && (
-                <p className="text-white/70 text-xs mt-1">
+              {selectedDate.getTime() !== dueDate.getTime() && <p className="text-white/70 text-xs mt-1">
                   Due date: {dueDate.toLocaleDateString()} (0% rate)
-                </p>
-              )}
+                </p>}
             </div>}
 
           <div className="flex justify-center">
@@ -219,5 +185,4 @@ const AcceptanceFlow = () => {
       </div>
     </div>;
 };
-
 export default AcceptanceFlow;
