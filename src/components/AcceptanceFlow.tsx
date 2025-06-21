@@ -133,22 +133,22 @@ const AcceptanceFlow = () => {
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center text-white font-semibold",
-                caption_label: "text-sm font-semibold text-white",
+                caption: "flex justify-center pt-1 relative items-center text-white/80 font-medium mb-4",
+                caption_label: "text-sm font-medium text-white/80",
                 nav: "space-x-1 flex items-center",
-                nav_button: "h-7 w-7 bg-white/20 border border-white/30 rounded-md p-0 text-white hover:bg-white/30 transition-colors shadow-sm",
+                nav_button: "h-7 w-7 bg-white/10 border border-white/20 rounded-md p-0 text-white/60 hover:bg-white/20 transition-colors",
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
-                table: "w-full border-collapse space-y-1",
-                head_row: "flex",
-                head_cell: "text-gray-700 rounded-md w-12 font-medium text-xs uppercase tracking-wide",
-                row: "flex w-full mt-2",
-                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12",
-                day: "h-12 w-12 p-0 font-medium text-gray-700 hover:text-gray-900 rounded-lg transition-colors flex flex-col items-center justify-center text-xs",
+                table: "w-full border-collapse",
+                head_row: "flex mb-2",
+                head_cell: "text-white/60 w-12 font-medium text-xs uppercase tracking-wider text-center",
+                row: "flex w-full",
+                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-16 w-12 border-b border-white/10",
+                day: "h-full w-full p-0 font-normal text-white/90 hover:text-white transition-colors flex flex-col items-center justify-center text-xs bg-transparent hover:bg-white/5",
                 day_selected: "text-white",
-                day_today: "text-gray-800 font-semibold",
-                day_outside: "text-gray-400 opacity-50",
-                day_disabled: "text-gray-300 opacity-30",
+                day_today: "text-white font-medium",
+                day_outside: "text-white/30 opacity-50",
+                day_disabled: "text-white/20 opacity-30",
                 day_hidden: "invisible"
               }} 
               components={{
@@ -161,30 +161,30 @@ const AcceptanceFlow = () => {
                   
                   return (
                     <div 
-                      className={`flex flex-col items-center justify-center h-full relative ${
+                      className={`flex flex-col items-center justify-center h-full w-full relative ${
                         inRange 
                           ? isDue 
-                            ? 'bg-blue-500 text-white rounded-lg' 
-                            : 'bg-blue-200 text-gray-800' +
-                              (isStart ? ' rounded-l-lg' : '') +
-                              (isEnd ? ' rounded-r-lg' : '')
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-blue-500/30 text-white' +
+                              (isStart ? ' rounded-l' : '') +
+                              (isEnd ? ' rounded-r' : '')
                           : ''
                       } ${
-                        isDue && !inRange ? 'bg-blue-500 text-white rounded-lg' : ''
+                        isDue && !inRange ? 'bg-blue-500 text-white rounded' : ''
                       }`}
                     >
-                      <div className="font-semibold">{date.getDate()}</div>
-                      <div className="text-[9px] leading-tight">
+                      <div className="font-medium text-sm leading-none mb-1">{date.getDate()}</div>
+                      <div className="text-[10px] leading-none opacity-90">
                         {rateInfo.rate}%
                       </div>
                       {isDue && (
-                        <div className="text-[7px] font-bold">DUE</div>
+                        <div className="text-[8px] font-bold leading-none mt-0.5 opacity-80">DUE</div>
                       )}
                     </div>
                   );
                 }
               }} 
-              className="rounded-2xl border border-white/20 backdrop-blur-sm p-4 bg-white/0" 
+              className="rounded-2xl border border-white/20 backdrop-blur-sm p-6 bg-white/10" 
             />
           </div>
 
