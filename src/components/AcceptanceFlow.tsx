@@ -1,104 +1,138 @@
 
 import { useState } from 'react';
+import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import {
-  PageContainer,
   FormCard,
   FormField,
   StyledInput,
-  StyledSelect,
   StyledButton,
   StyledForm
 } from '@/design-system';
 
 const AcceptanceFlow = () => {
-  const [companyName, setCompanyName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [acceptanceType, setAcceptanceType] = useState('');
-  const [terms, setTerms] = useState('');
-  const [notes, setNotes] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [paymentAmount] = useState('$10,000');
+  const [companyName] = useState('Example Company');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Mock data for daily rates (in real app, this would come from your backend)
+  const getDailyRate = (date: Date) => {
+    const day = date.getDate();
+    // Sample rates - earlier dates have higher discounts, later dates have premiums
+    if (day <= 10) return { rate: (4.0 - day * 0.3).toFixed(1), type: 'discount' };
+    if (day <= 20) return { rate: (3.0 - (day - 10) * 0.2).toFixed(1), type: 'discount' };
+    if (day <= 25) return { rate: (1.0 - (day - 20) * 0.2).toFixed(1), type: 'discount' };
+    return { rate: ((day - 25) * 0.2).toFixed(1), type: 'premium' };
+  };
+
+  const handleSchedulePayment = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Acceptance submitted successfully!');
-    console.log('Acceptance submitted:', {
-      companyName,
-      contactPerson,
-      acceptanceType,
-      terms,
-      notes
+    if (!selectedDate) {
+      toast.error('Please select a payment date');
+      return;
+    }
+    
+    const rateInfo = getDailyRate(selectedDate);
+    toast.success(`Payment scheduled for ${selectedDate.toLocaleDateString()} with ${rateInfo.rate}% ${rateInfo.type}`);
+    console.log('Payment scheduled:', {
+      date: selectedDate,
+      amount: paymentAmount,
+      rate: rateInfo
     });
   };
 
-  const acceptanceTypeOptions = [
-    { value: 'full', label: 'Full Acceptance' },
-    { value: 'partial', label: 'Partial Acceptance' },
-    { value: 'conditional', label: 'Conditional Acceptance' }
-  ];
-
   return (
-    <PageContainer>
-      <FormCard
-        title="Acceptance Review"
-        heroImage="/lovable-uploads/838a1349-55fb-4cc8-aea2-51a09d22f300.png"
-        heroAlt="Acceptance Flow Hero"
-      >
-        <StyledForm onSubmit={handleSubmit}>
-          <FormField label="Company Name" htmlFor="company">
-            <StyledInput
-              id="company"
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="Acme Corporation"
-            />
-          </FormField>
+    <div className="space-y-6">
+      <FormCard title="Select a payment date">
+        <div className="text-center mb-6">
+          <p className="text-sm text-gray-600 mb-2">
+            provided to you by <strong>{companyName}</strong>
+          </p>
+          <p className="text-lg font-medium">
+            Payment Amount: {paymentAmount}
+          </p>
+        </div>
 
-          <FormField label="Contact Person" htmlFor="contact">
-            <StyledInput
-              id="contact"
-              type="text"
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
-              placeholder="John Smith"
+        <StyledForm onSubmit={handleSchedulePayment}>
+          <div className="mb-6">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              className="rounded-md border mx-auto"
+              modifiers={{
+                discount: (date) => {
+                  const rate = getDailyRate(date);
+                  return rate.type === 'discount';
+                },
+                premium: (date) => {
+                  const rate = getDailyRate(date);
+                  return rate.type === 'premium';
+                }
+              }}
+              modifiersStyles={{
+                discount: { 
+                  backgroundColor: '#dcf4dc', 
+                  color: '#166534',
+                  fontWeight: '500'
+                },
+                premium: { 
+                  backgroundColor: '#fef3c7', 
+                  color: '#92400e',
+                  fontWeight: '500'
+                }
+              }}
+              components={{
+                DayContent: ({ date }) => {
+                  const rateInfo = getDailyRate(date);
+                  return (
+                    <div className="text-center">
+                      <div>{date.getDate()}</div>
+                      <div className="text-xs">
+                        {rateInfo.rate}%
+                      </div>
+                    </div>
+                  );
+                }
+              }}
             />
-          </FormField>
+          </div>
 
-          <FormField label="Acceptance Type" htmlFor="type">
-            <StyledSelect
-              value={acceptanceType}
-              onValueChange={setAcceptanceType}
-              placeholder="Select acceptance type"
-              options={acceptanceTypeOptions}
-            />
-          </FormField>
-
-          <FormField label="Terms Agreement" htmlFor="terms">
-            <StyledInput
-              id="terms"
-              type="text"
-              value={terms}
-              onChange={(e) => setTerms(e.target.value)}
-              placeholder="Standard terms and conditions"
-            />
-          </FormField>
-
-          <FormField label="Additional Notes" htmlFor="notes">
-            <StyledInput
-              id="notes"
-              type="text"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Any special requirements..."
-            />
-          </FormField>
+          {selectedDate && (
+            <div className="mb-4 p-3 bg-blue-50 rounded-lg text-center">
+              <p className="text-sm text-blue-800">
+                Selected: {selectedDate.toLocaleDateString()}
+              </p>
+              <p className="text-sm text-blue-600">
+                Rate: {getDailyRate(selectedDate).rate}% {getDailyRate(selectedDate).type}
+              </p>
+            </div>
+          )}
 
           <StyledButton type="submit">
-            Submit Acceptance
+            Schedule Payment
           </StyledButton>
         </StyledForm>
+
+        <div className="mt-4 text-center text-xs text-gray-500">
+          Powered by formula
+        </div>
       </FormCard>
-    </PageContainer>
+
+      {/* Legend */}
+      <FormCard title="Rate Legend">
+        <div className="space-y-2 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-200 rounded"></div>
+            <span>Early payment discount (green dates)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-200 rounded"></div>
+            <span>Late payment premium (yellow dates)</span>
+          </div>
+        </div>
+      </FormCard>
+    </div>
   );
 };
 
