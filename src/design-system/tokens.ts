@@ -44,6 +44,9 @@ export const designTokens = {
       gap: '1rem', // 16px between form fields
     }
   },
+  container: {
+    maxWidth: '460px'
+  },
   borderRadius: {
     card: '1.5rem', // 24px for cards
     input: '0.75rem', // 12px for inputs

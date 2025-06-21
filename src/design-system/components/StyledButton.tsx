@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { designTokens } from '../tokens';
 
-interface StyledButtonProps extends React.ComponentProps<typeof Button> {
+interface StyledButtonProps extends Omit<React.ComponentProps<typeof Button>, 'variant'> {
   variant?: 'primary' | 'secondary';
 }
 
