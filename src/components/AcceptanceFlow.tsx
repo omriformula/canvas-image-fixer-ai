@@ -72,9 +72,6 @@ const AcceptanceFlow = () => {
       {/* Main Payment Card with Glassmorphism */}
       <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-3xl p-8 shadow-2xl">
         <div className="text-center mb-8 px-0 mx-[83px]">
-          <h3 className="text-2xl font-medium text-white mb-4">
-            Payment Acceptance
-          </h3>
           <p className="text-white/80 mb-2">
             Payment request from <strong className="text-white">{companyName}</strong>
           </p>
