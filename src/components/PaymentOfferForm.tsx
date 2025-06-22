@@ -1,7 +1,8 @@
-
 import { useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
+import { designAuditor, AuditResult } from '@/services/designAudit';
+import { AuditResultsModal } from '@/components/audit/AuditResultsModal';
 import {
   PageContainer,
   FormCard,
@@ -20,6 +21,11 @@ const PaymentOfferForm = () => {
   const [amount, setAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [latePayment, setLatePayment] = useState(false);
+  
+  // New audit-related state
+  const [auditInProgress, setAuditInProgress] = useState(false);
+  const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
+  const [showAuditModal, setShowAuditModal] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +39,26 @@ const PaymentOfferForm = () => {
       dueDate,
       latePayment
     });
+  };
+
+  const handle360Audit = async () => {
+    setAuditInProgress(true);
+    
+    toast.info('🔍 Starting comprehensive 360° audit...', {
+      description: 'Checking visual design and functional integrity'
+    });
+
+    try {
+      const result = await designAuditor.perform360Audit();
+      setAuditResult(result);
+      setShowAuditModal(true);
+    } catch (error) {
+      toast.error('Audit failed to complete', {
+        description: 'Please try again or contact support'
+      });
+    } finally {
+      setAuditInProgress(false);
+    }
   };
 
   const recipientOptions = [
@@ -117,11 +143,39 @@ const PaymentOfferForm = () => {
             />
           </div>
 
+          {/* Audit Section */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="bg-blue-50 p-4 rounded-xl mb-4">
+              <h3 className="font-semibold text-blue-900 mb-2">
+                🔍 Pre-Deployment Validation
+              </h3>
+              <p className="text-sm text-blue-700">
+                Run a comprehensive audit to ensure perfect visual design and functionality before sending to your dev team.
+              </p>
+            </div>
+            
+            <button
+              type="button"
+              onClick={handle360Audit}
+              disabled={auditInProgress}
+              className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 transition-all duration-200 mb-4"
+            >
+              {auditInProgress ? '🔄 Running 360° Audit...' : '🎯 Run 360° Audit'}
+            </button>
+          </div>
+
           <StyledButton type="submit">
             Send Offer
           </StyledButton>
         </StyledForm>
       </FormCard>
+
+      {/* Audit Results Modal */}
+      <AuditResultsModal
+        result={auditResult}
+        isOpen={showAuditModal}
+        onClose={() => setShowAuditModal(false)}
+      />
     </PageContainer>
   );
 };
