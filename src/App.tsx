@@ -12,6 +12,7 @@ import LeadCapture from "./pages/LeadCapture";
 import EmailLandingPreview from "./pages/EmailLandingPreview";
 import AnalysisResults from "./pages/AnalysisResults";
 import PaymentOffer from "./pages/PaymentOffer";
+import RealStaging from "./pages/RealStaging";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/link-creation" element={<LinkCreation />} />
           <Route path="/acceptance" element={<Acceptance />} />
           <Route path="/payment-offer" element={<PaymentOffer />} />
+          <Route path="/real-staging" element={<RealStaging />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/get-integration" element={<LeadCapture />} />
           <Route path="/email-preview" element={<EmailLandingPreview />} />

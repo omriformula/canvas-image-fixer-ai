@@ -1,8 +1,10 @@
+
 import { useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { designAuditor, AuditResult } from '@/services/designAudit';
 import { AuditResultsModal } from '@/components/audit/AuditResultsModal';
+import { Link } from 'react-router-dom';
 import {
   PageContainer,
   FormCard,
@@ -143,14 +145,32 @@ const PaymentOfferForm = () => {
             />
           </div>
 
-          {/* Audit Section */}
+          {/* Real Staging Section */}
           <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="bg-green-50 p-4 rounded-xl mb-4">
+              <h3 className="font-semibold text-green-900 mb-2">
+                🚀 Ready for Real Staging?
+              </h3>
+              <p className="text-sm text-green-700 mb-3">
+                Apply this design system to your actual GitHub repository and create a real staging environment for your dev team.
+              </p>
+              <Link
+                to="/real-staging"
+                className="inline-block px-6 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors"
+              >
+                🔗 Set Up Real Staging
+              </Link>
+            </div>
+          </div>
+
+          {/* Local Audit Section */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="bg-blue-50 p-4 rounded-xl mb-4">
               <h3 className="font-semibold text-blue-900 mb-2">
-                🔍 Pre-Deployment Validation
+                🔍 Local Design Validation
               </h3>
               <p className="text-sm text-blue-700">
-                Run a comprehensive audit to ensure perfect visual design and functionality before sending to your dev team.
+                Test the design system implementation on this reference form before applying to your real codebase.
               </p>
             </div>
             
@@ -160,7 +180,7 @@ const PaymentOfferForm = () => {
               disabled={auditInProgress}
               className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 transition-all duration-200 mb-4"
             >
-              {auditInProgress ? '🔄 Running 360° Audit...' : '🎯 Run 360° Audit'}
+              {auditInProgress ? '🔄 Running Local Audit...' : '🎯 Run Local Design Audit'}
             </button>
           </div>
 
