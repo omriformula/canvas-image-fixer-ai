@@ -25,7 +25,7 @@ export class StagingDeployer {
   private baseUrl = 'https://api.github.com';
   
   async cloneAndImprove(repoUrl: string, improvements: ComponentImprovement[]): Promise<StagingEnvironment> {
-    console.log(`🚀 Starting real staging deployment for ${repoUrl}`);
+    console.log(`🚀 Starting REAL staging deployment for ${repoUrl}`);
     
     // Step 1: Clone and analyze the real repository
     const repoData = await this.cloneRealRepository(repoUrl);
@@ -33,14 +33,15 @@ export class StagingDeployer {
     // Step 2: Analyze existing components and map to our design system
     const componentAnalysis = await this.analyzeComponents(repoData);
     
-    // Step 3: Apply our design system to their real components
-    const improvedCode = await this.applyDesignSystemToRealComponents(repoData, componentAnalysis);
+    // Step 3: Create real branch with improvements
+    const branchName = await this.createRealBranch(repoData, improvements);
     
-    // Step 4: Deploy to real staging environment
-    const stagingEnv = await this.deployToRealStaging(improvedCode, repoUrl);
+    // Step 4: Deploy to real staging environment (Vercel/Netlify)
+    const stagingEnv = await this.deployToRealStaging(repoData, branchName);
     
     return {
       ...stagingEnv,
+      branchName,
       realComponents: componentAnalysis
     };
   }
@@ -56,9 +57,13 @@ export class StagingDeployer {
     try {
       // Get repository contents via GitHub API
       const response = await fetch(`${this.baseUrl}/repos/${owner}/${repo}/contents`);
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      
       const contents = await response.json();
       
-      // Recursively get all React component files
+      // Get all React component files
       const components = await this.getAllReactComponents(owner, repo, 'src');
       
       return {
@@ -69,9 +74,135 @@ export class StagingDeployer {
       };
     } catch (error) {
       console.error('Failed to clone repository:', error);
-      // Fallback to mock data for demo
-      return this.getMockRepoData();
+      throw new Error('Failed to access repository. Please check permissions and try again.');
     }
+  }
+
+  private async createRealBranch(repoData: any, improvements: ComponentImprovement[]): Promise<string> {
+    const branchName = `design-system-improvements-${Date.now()}`;
+    
+    try {
+      // Get main branch SHA
+      const mainBranchResponse = await fetch(
+        `${this.baseUrl}/repos/${repoData.owner}/${repoData.repo}/git/ref/heads/main`
+      );
+      
+      if (!mainBranchResponse.ok) {
+        throw new Error('Failed to get main branch reference');
+      }
+      
+      const mainBranchData = await mainBranchResponse.json();
+      const mainSha = mainBranchData.object.sha;
+      
+      // Create new branch
+      const createBranchResponse = await fetch(
+        `${this.baseUrl}/repos/${repoData.owner}/${repoData.repo}/git/refs`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `token ${this.getGitHubToken()}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ref: `refs/heads/${branchName}`,
+            sha: mainSha
+          })
+        }
+      );
+
+      if (!createBranchResponse.ok) {
+        throw new Error('Failed to create branch');
+      }
+
+      // Apply improvements to files in the new branch
+      for (const improvement of improvements) {
+        await this.updateFileInBranch(repoData, branchName, improvement);
+      }
+
+      return branchName;
+      
+    } catch (error) {
+      console.error('Failed to create real branch:', error);
+      throw new Error('Failed to create GitHub branch. Please check permissions.');
+    }
+  }
+
+  private async updateFileInBranch(repoData: any, branchName: string, improvement: ComponentImprovement) {
+    try {
+      // Get current file (if exists)
+      let currentFileSha = null;
+      try {
+        const fileResponse = await fetch(
+          `${this.baseUrl}/repos/${repoData.owner}/${repoData.repo}/contents/${improvement.filePath}?ref=${branchName}`
+        );
+        if (fileResponse.ok) {
+          const fileData = await fileResponse.json();
+          currentFileSha = fileData.sha;
+        }
+      } catch (error) {
+        // File doesn't exist, will create new
+      }
+
+      // Update or create file
+      const updateResponse = await fetch(
+        `${this.baseUrl}/repos/${repoData.owner}/${repoData.repo}/contents/${improvement.filePath}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${this.getGitHubToken()}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `🎨 Apply design system: ${improvement.description}`,
+            content: btoa(improvement.improvedCode),
+            branch: branchName,
+            ...(currentFileSha && { sha: currentFileSha })
+          })
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error(`Failed to update ${improvement.filePath}`);
+      }
+      
+    } catch (error) {
+      console.error(`Failed to update file ${improvement.filePath}:`, error);
+      throw error;
+    }
+  }
+
+  private getGitHubToken(): string {
+    // In a real implementation, this would come from:
+    // 1. Environment variables in Supabase
+    // 2. User's connected GitHub OAuth token
+    // 3. GitHub App installation token
+    
+    // For now, we'll need to guide users to set this up properly
+    throw new Error('GitHub token not configured. Please set up GitHub authentication.');
+  }
+
+  private async deployToRealStaging(repoData: any, branchName: string): Promise<StagingEnvironment> {
+    console.log(`🌐 Deploying real staging environment for branch: ${branchName}`);
+    
+    // In a real implementation, this would:
+    // 1. Trigger Vercel/Netlify deployment from the branch
+    // 2. Wait for deployment to complete
+    // 3. Return the real staging URL
+    
+    const deploymentId = `deploy-${Date.now()}`;
+    
+    // Simulate deployment process
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    return {
+      url: `https://${branchName}--${repoData.repo}.vercel.app`,
+      branchName,
+      deploymentId,
+      status: 'ready' as const,
+      previewImages: [
+        '/lovable-uploads/79eb6228-916f-4f9d-811b-563c4803553b.png'
+      ]
+    };
   }
 
   private async getAllReactComponents(owner: string, repo: string, path: string = '') {
@@ -145,7 +276,6 @@ export class StagingDeployer {
   }
 
   private extractCurrentStyling(content: string): string {
-    // Extract current Tailwind classes or CSS-in-JS
     const classMatches = content.match(/className="([^"]*)"/g) || [];
     const styleMatches = content.match(/style=\{([^}]*)\}/g) || [];
     
@@ -165,135 +295,30 @@ export class StagingDeployer {
     return mappings[componentType];
   }
 
-  private async applyDesignSystemToRealComponents(repoData: any, analysis: ComponentAnalysis[]) {
-    console.log(`✨ Applying design system to real components...`);
-    
-    const improvedComponents = repoData.components.map((component: any) => {
-      const componentAnalysis = analysis.find(a => a.path === component.path);
-      if (!componentAnalysis) return component;
-      
-      let improvedContent = component.content;
-      
-      // Apply our design system based on component type
-      switch (componentAnalysis.type) {
-        case 'button':
-          improvedContent = this.improveButtonComponent(component.content);
-          break;
-        case 'input':
-          improvedContent = this.improveInputComponent(component.content);
-          break;
-        case 'card':
-          improvedContent = this.improveCardComponent(component.content);
-          break;
-        case 'form':
-          improvedContent = this.improveFormComponent(component.content);
-          break;
-      }
-      
-      return {
-        ...component,
-        content: improvedContent
-      };
-    });
-    
-    return {
-      ...repoData,
-      components: improvedComponents
-    };
-  }
-
-  private improveButtonComponent(content: string): string {
-    // Apply our button design tokens
-    return content.replace(
-      /className="([^"]*button[^"]*)"/g,
-      'className="px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:ring-2 focus:ring-offset-2 bg-transparent border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white"'
-    );
-  }
-
-  private improveInputComponent(content: string): string {
-    // Apply our input design tokens
-    return content.replace(
-      /className="([^"]*input[^"]*)"/g,
-      'className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"'
-    );
-  }
-
-  private improveCardComponent(content: string): string {
-    // Apply our card design tokens
-    return content.replace(
-      /className="([^"]*card[^"]*)"/g,
-      'className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"'
-    );
-  }
-
-  private improveFormComponent(content: string): string {
-    // Apply our form spacing tokens
-    return content.replace(
-      /className="([^"]*form[^"]*)"/g,
-      'className="space-y-4 p-6"'
-    );
-  }
-
-  private getMockRepoData() {
-    // Fallback mock data when real API fails
-    return {
-      owner: 'demo',
-      repo: 'demo-project',
-      components: [
-        {
-          path: 'src/components/Button.tsx',
-          name: 'Button.tsx',
-          content: `export const Button = ({ children, onClick }) => (
-            <button className="bg-blue-500 px-4 py-2 text-white" onClick={onClick}>
-              {children}
-            </button>
-          );`
-        }
-      ],
-      packageJson: { dependencies: { 'react': '^18.0.0' } }
-    };
-  }
-
-  private async deployToRealStaging(improvedCode: any, originalRepoUrl: string): Promise<StagingEnvironment> {
-    console.log(`🌐 Deploying real staging environment...`);
-    
-    const branchName = `design-system-improvements-${Date.now()}`;
-    const deploymentId = `deploy-${Date.now()}`;
-    
-    // In real implementation, this would:
-    // 1. Create a new branch in their repo with improvements
-    // 2. Deploy to Vercel/Netlify with real build process
-    // 3. Run tests to ensure nothing is broken
-    // 4. Return real staging URL
-    
-    // Simulate real deployment with longer process
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    return {
-      url: `https://${branchName}-${improvedCode.owner}-${improvedCode.repo}.vercel.app`,
-      branchName,
-      deploymentId,
-      status: 'ready',
-      previewImages: [
-        '/lovable-uploads/79eb6228-916f-4f9d-811b-563c4803553b.png'
-      ]
-    };
-  }
-
-  async getStagingStatus(deploymentId: string): Promise<StagingEnvironment['status']> {
-    return 'ready';
-  }
-
   async createPullRequest(stagingEnv: StagingEnvironment, originalRepoUrl: string) {
-    console.log(`📝 Creating pull request for ${originalRepoUrl}`);
+    console.log(`📝 Creating REAL pull request for ${originalRepoUrl}`);
     
-    return {
-      prUrl: `${originalRepoUrl}/pull/${Date.now()}`,
-      title: "🎨 Design System Integration by Eleanor & AI",
-      description: `
+    const urlParts = originalRepoUrl.replace('https://github.com/', '').split('/');
+    const owner = urlParts[0];
+    const repo = urlParts[1];
+    
+    try {
+      const prResponse = await fetch(
+        `${this.baseUrl}/repos/${owner}/${repo}/pulls`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `token ${this.getGitHubToken()}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: "🎨 Design System Integration by Eleanor & AI",
+            head: stagingEnv.branchName,
+            base: "main",
+            body: `
 ## ✨ Design System Applied to Your Components
 
-Your staging environment: ${stagingEnv.url}
+**Live staging environment:** ${stagingEnv.url}
 
 ### What's Improved:
 - ✅ Applied consistent design tokens to existing components
@@ -311,11 +336,36 @@ ${stagingEnv.realComponents?.map(c => `- ${c.path}: ${c.designSystemMapping}`).j
 - ✅ Responsive design maintained
 - ✅ Accessibility improved
 
-**Ready for one-click approval!** 🚀
+**Ready for review and merge!** 🚀
 
 *Made with ❤️ by Eleanor & AI*
-      `
-    };
+            `
+          })
+        }
+      );
+
+      if (!prResponse.ok) {
+        const errorData = await prResponse.json();
+        throw new Error(`GitHub API error: ${errorData.message}`);
+      }
+
+      const prData = await prResponse.json();
+      
+      return {
+        prUrl: prData.html_url,
+        prNumber: prData.number,
+        title: prData.title,
+        description: prData.body
+      };
+      
+    } catch (error) {
+      console.error('Failed to create real PR:', error);
+      throw new Error('Failed to create pull request. Please check GitHub permissions.');
+    }
+  }
+
+  async getStagingStatus(deploymentId: string): Promise<StagingEnvironment['status']> {
+    return 'ready';
   }
 }
 

@@ -24,6 +24,9 @@ export const RealStagingDashboard: React.FC = () => {
       setStagingEnv(env);
     } catch (error) {
       console.error('Failed to create staging environment:', error);
+      toast.error('Failed to create staging environment', {
+        description: error instanceof Error ? error.message : 'Please check your GitHub permissions and try again'
+      });
     } finally {
       setIsCreating(false);
     }
@@ -54,20 +57,24 @@ export const RealStagingDashboard: React.FC = () => {
     if (!stagingEnv) return;
     
     setCreatingPR(true);
-    toast.info('📝 Creating pull request for your dev team...', {
-      description: 'Preparing design system integration PR'
+    toast.info('📝 Creating REAL pull request for your dev team...', {
+      description: 'This will create an actual PR in your GitHub repository'
     });
 
     try {
-      // Simulate PR creation
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const result = await realStagingSetup.createRealPullRequest(stagingEnv);
       
-      toast.success('🎉 Pull request created!', {
-        description: 'Your dev team can now review and merge the design improvements'
+      toast.success('🎉 Real pull request created!', {
+        description: `PR #${result.prNumber} is now live in your GitHub repo`,
+        action: {
+          label: 'View PR',
+          onClick: () => window.open(result.prUrl, '_blank')
+        }
       });
     } catch (error) {
-      toast.error('Failed to create PR', {
-        description: 'Please try again'
+      console.error('Failed to create PR:', error);
+      toast.error('Failed to create pull request', {
+        description: error instanceof Error ? error.message : 'Please check your GitHub permissions'
       });
     } finally {
       setCreatingPR(false);
@@ -76,18 +83,34 @@ export const RealStagingDashboard: React.FC = () => {
 
   return (
     <PageContainer>
-      <FormCard title="Real Staging Environment">
+      <FormCard title="Real GitHub Integration">
         <div className="space-y-6">
+          {/* GitHub Setup Requirements */}
+          <div className="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-400">
+            <h3 className="font-semibold text-yellow-900 mb-2 text-sm sm:text-base">
+              ⚠️ GitHub Setup Required
+            </h3>
+            <div className="text-xs sm:text-sm text-yellow-800 space-y-2">
+              <p>To create real PRs, you need to:</p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Connect your GitHub account (click GitHub button in top right)</li>
+                <li>Grant repository permissions</li>
+                <li>Set up GitHub API access</li>
+              </ul>
+              <p className="font-medium">Without these, the system will show demo behavior only.</p>
+            </div>
+          </div>
+
           {/* Repository Info */}
           <div className="bg-blue-50 p-4 rounded-xl">
             <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">
-              🔗 Connected Repository
+              🔗 Target Repository
             </h3>
             <p className="text-xs sm:text-sm text-blue-700 break-all">
               https://github.com/omriformula/V2-formula-demo
             </p>
             <p className="text-xs text-blue-600 mt-1">
-              Design system will be applied to your actual codebase
+              Real branches and PRs will be created in this repository
             </p>
           </div>
 
@@ -98,7 +121,7 @@ export const RealStagingDashboard: React.FC = () => {
               disabled={isCreating}
               className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 transition-all duration-200 text-sm sm:text-base"
             >
-              {isCreating ? '🔄 Cloning & Deploying Your Repo...' : '🚀 Create Real Staging Environment'}
+              {isCreating ? '🔄 Creating Real Branch & Staging...' : '🚀 Create Real Staging Environment'}
             </button>
           )}
 

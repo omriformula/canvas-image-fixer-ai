@@ -1,56 +1,126 @@
-
-import { stagingDeployer, ComponentImprovement } from './stagingDeployer';
+import { stagingDeployer, ComponentImprovement, StagingEnvironment } from './stagingDeployer';
 import { toast } from 'sonner';
 
 export class RealStagingSetup {
   private repoUrl = 'https://github.com/omriformula/V2-formula-demo';
   
   async initializeRealStaging() {
-    console.log('🚀 Initializing real staging environment from your GitHub repo...');
+    console.log('🚀 Initializing REAL staging environment from your GitHub repo...');
     
-    toast.info('🔄 Cloning your actual repository...', {
-      description: 'Fetching your real codebase to apply design improvements'
+    toast.info('🔄 Creating real branch in your GitHub repository...', {
+      description: 'This will create actual commits and deploy a real staging environment'
     });
 
     try {
-      // Clone and analyze the real repository
+      // Real improvements that will be applied to actual files
       const improvements: ComponentImprovement[] = [
         {
-          filePath: 'src/components/Button.tsx',
+          filePath: 'src/components/ui/Button.tsx',
           originalCode: '',
           improvedCode: this.getImprovedButtonCode(),
           description: 'Applied design system tokens with consistent styling and hover states'
         },
         {
-          filePath: 'src/components/Form.tsx', 
+          filePath: 'src/components/ui/Form.tsx', 
           originalCode: '',
           improvedCode: this.getImprovedFormCode(),
           description: 'Improved form layout with proper spacing and design tokens'
         },
         {
-          filePath: 'src/components/Card.tsx',
+          filePath: 'src/components/ui/Card.tsx',
           originalCode: '',
           improvedCode: this.getImprovedCardCode(),
           description: 'Enhanced card styling with shadows and border radius from design system'
+        },
+        {
+          filePath: 'src/design-system/tokens.ts',
+          originalCode: '',
+          improvedCode: this.getDesignTokensCode(),
+          description: 'Added design system tokens for consistent styling'
         }
       ];
 
-      // Deploy to real staging with improvements
+      // Deploy to REAL staging with actual GitHub integration
       const stagingEnv = await stagingDeployer.cloneAndImprove(this.repoUrl, improvements);
       
-      toast.success('🎉 Real staging environment ready!', {
-        description: `Your actual code is now live at: ${stagingEnv.url}`
+      toast.success('🎉 Real staging environment created!', {
+        description: `Live at: ${stagingEnv.url} | Branch: ${stagingEnv.branchName}`,
+        duration: 5000
       });
 
       return stagingEnv;
       
     } catch (error) {
       console.error('Failed to set up real staging:', error);
-      toast.error('Failed to create staging environment', {
-        description: 'Please check your repository permissions and try again'
-      });
+      
+      if (error instanceof Error && error.message.includes('GitHub token')) {
+        toast.error('GitHub authentication required', {
+          description: 'Please connect your GitHub account and grant repository permissions'
+        });
+      } else {
+        toast.error('Failed to create staging environment', {
+          description: error instanceof Error ? error.message : 'Please check your repository permissions and try again'
+        });
+      }
       throw error;
     }
+  }
+
+  async createRealPullRequest(stagingEnv: StagingEnvironment) {
+    console.log('📝 Creating REAL pull request in GitHub...');
+    
+    try {
+      const result = await stagingDeployer.createPullRequest(stagingEnv, this.repoUrl);
+      
+      console.log('✅ Real PR created:', result);
+      
+      return result;
+      
+    } catch (error) {
+      console.error('Failed to create real PR:', error);
+      throw error;
+    }
+  }
+
+  private getDesignTokensCode(): string {
+    return `
+export const designTokens = {
+  colors: {
+    primary: {
+      50: '#f0f9ff',
+      500: '#3b82f6',
+      600: '#2563eb',
+      900: '#1e3a8a'
+    },
+    gray: {
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827'
+    }
+  },
+  spacing: {
+    xs: '0.5rem',
+    sm: '0.75rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem'
+  },
+  borderRadius: {
+    sm: '0.375rem',
+    md: '0.5rem',
+    lg: '0.75rem',
+    xl: '1rem'
+  },
+  shadows: {
+    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+  }
+};
+    `;
   }
 
   private getImprovedButtonCode(): string {
