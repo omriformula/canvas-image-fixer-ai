@@ -1,3 +1,4 @@
+import { githubAuth } from './githubAuth';
 
 interface ProductionDeployment {
   repoUrl: string;
@@ -8,13 +9,20 @@ interface ProductionDeployment {
 }
 
 export class ProductionDeployer {
-  private productionRepoUrl = 'https://github.com/omriformula/v2-formula-demo'; // Your actual production repo
-  private githubToken = process.env.GITHUB_TOKEN || localStorage.getItem('github_token');
+  private productionRepoUrl = 'https://github.com/omriformula/v2-formula-demo';
+  
+  private getGitHubToken(): string {
+    const token = githubAuth.getStoredToken();
+    if (!token) {
+      throw new Error('GitHub token required. Please connect your GitHub account in project settings.');
+    }
+    return token;
+  }
 
   async deployToProduction(handoffRequestId: string): Promise<ProductionDeployment> {
     console.log('🚀 Starting REAL production deployment...');
     
-    if (!this.githubToken) {
+    if (!this.getGitHubToken()) {
       throw new Error('GitHub token required. Please connect your GitHub account in project settings.');
     }
 
@@ -67,7 +75,7 @@ export class ProductionDeployer {
       // Get main branch SHA from production repo
       const response = await fetch(`https://api.github.com/repos/omriformula/v2-formula-demo/git/ref/heads/main`, {
         headers: {
-          'Authorization': `token ${this.githubToken}`,
+          'Authorization': `token ${this.getGitHubToken()}`,
           'Accept': 'application/vnd.github.v3+json'
         }
       });
@@ -82,7 +90,7 @@ export class ProductionDeployer {
       const createBranchResponse = await fetch(`https://api.github.com/repos/omriformula/v2-formula-demo/git/refs`, {
         method: 'POST',
         headers: {
-          'Authorization': `token ${this.githubToken}`,
+          'Authorization': `token ${this.getGitHubToken()}`,
           'Content-Type': 'application/json',
           'Accept': 'application/vnd.github.v3+json'
         },
@@ -114,7 +122,7 @@ export class ProductionDeployer {
             `https://api.github.com/repos/omriformula/v2-formula-demo/contents/${change.filePath}?ref=${branchName}`,
             {
               headers: {
-                'Authorization': `token ${this.githubToken}`,
+                'Authorization': `token ${this.getGitHubToken()}`,
                 'Accept': 'application/vnd.github.v3+json'
               }
             }
@@ -134,7 +142,7 @@ export class ProductionDeployer {
           {
             method: 'PUT',
             headers: {
-              'Authorization': `token ${this.githubToken}`,
+              'Authorization': `token ${this.getGitHubToken()}`,
               'Content-Type': 'application/json',
               'Accept': 'application/vnd.github.v3+json'
             },
@@ -164,7 +172,7 @@ export class ProductionDeployer {
       const prResponse = await fetch('https://api.github.com/repos/omriformula/v2-formula-demo/pulls', {
         method: 'POST',
         headers: {
-          'Authorization': `token ${this.githubToken}`,
+          'Authorization': `token ${this.getGitHubToken()}`,
           'Content-Type': 'application/json',
           'Accept': 'application/vnd.github.v3+json'
         },
