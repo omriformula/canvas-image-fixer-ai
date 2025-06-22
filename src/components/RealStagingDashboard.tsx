@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { realStagingSetup } from '@/services/realStagingSetup';
 import { StagingEnvironment } from '@/services/stagingDeployer';
@@ -7,6 +6,7 @@ import { designAuditor } from '@/services/designAudit';
 import { AuditResultsModal } from '@/components/audit/AuditResultsModal';
 import { toast } from 'sonner';
 import { PageContainer, FormCard } from '@/design-system';
+import { Link } from 'react-router-dom';
 import type { AuditResult } from '@/services/designAudit';
 
 export const RealStagingDashboard: React.FC = () => {
@@ -85,6 +85,22 @@ export const RealStagingDashboard: React.FC = () => {
     <PageContainer>
       <FormCard title="Real GitHub Integration">
         <div className="space-y-6">
+          {/* Dev Team Dashboard Link */}
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border-l-4 border-green-400">
+            <h3 className="font-semibold text-green-900 mb-2 text-sm sm:text-base">
+              👥 For Dev Teams
+            </h3>
+            <p className="text-xs sm:text-sm text-green-700 mb-3">
+              One-click deployment dashboard for development teams. No manual coding required!
+            </p>
+            <Link
+              to="/dev-handoff"
+              className="inline-block px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors text-sm"
+            >
+              🚀 Open Dev Team Dashboard
+            </Link>
+          </div>
+
           {/* GitHub Setup Requirements */}
           <div className="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-400">
             <h3 className="font-semibold text-yellow-900 mb-2 text-sm sm:text-base">

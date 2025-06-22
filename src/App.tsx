@@ -13,6 +13,7 @@ import EmailLandingPreview from "./pages/EmailLandingPreview";
 import AnalysisResults from "./pages/AnalysisResults";
 import PaymentOffer from "./pages/PaymentOffer";
 import RealStaging from "./pages/RealStaging";
+import DevTeamHandoff from "./pages/DevTeamHandoff";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/acceptance" element={<Acceptance />} />
           <Route path="/payment-offer" element={<PaymentOffer />} />
           <Route path="/real-staging" element={<RealStaging />} />
+          <Route path="/dev-handoff" element={<DevTeamHandoff />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/get-integration" element={<LeadCapture />} />
           <Route path="/email-preview" element={<EmailLandingPreview />} />
