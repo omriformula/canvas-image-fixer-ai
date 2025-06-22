@@ -13,7 +13,8 @@ interface GitHubToken {
 
 export class GitHubAuth {
   private config: GitHubAuthConfig = {
-    clientId: process.env.VITE_GITHUB_CLIENT_ID || 'your-github-app-client-id',
+    // Using import.meta.env instead of process.env for Vite
+    clientId: import.meta.env.VITE_GITHUB_CLIENT_ID || 'your-github-app-client-id',
     redirectUri: `${window.location.origin}/auth/github/callback`,
     scopes: ['repo', 'write:repo_hook']
   };
@@ -80,6 +81,15 @@ export class GitHubAuth {
 
   isAuthenticated(): boolean {
     return !!this.getStoredToken();
+  }
+
+  // For testing purposes, allow manual token input
+  setTestToken(token: string): void {
+    this.storeToken({
+      accessToken: token,
+      tokenType: 'Bearer',
+      scope: 'repo write:repo_hook'
+    });
   }
 
   private generateState(): string {

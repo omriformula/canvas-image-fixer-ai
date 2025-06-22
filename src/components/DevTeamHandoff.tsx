@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { FormCard, PageContainer } from '@/design-system';
 import { CheckCircle, AlertCircle, Clock, Download, Mail, ExternalLink, Github, Settings, RefreshCw } from 'lucide-react';
 import { githubAuth } from '@/services/githubAuth';
 import { repoSyncManager } from '@/services/repoSyncManager';
+import { GitHubTokenInput } from './GitHubTokenInput';
 
 interface MergeEvent {
   prNumber: number;
@@ -146,33 +146,32 @@ export const DevTeamHandoff: React.FC = () => {
         </div>
 
         {/* GitHub Connection Status */}
-        <FormCard className="border border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Github className={`h-6 w-6 ${githubConnected ? 'text-green-600' : 'text-gray-400'}`} />
-              <div>
-                <h3 className="font-semibold">
-                  {githubConnected ? '✅ GitHub Connected' : '⚠️ GitHub Connection Required'}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {githubConnected 
-                    ? 'Ready for real repository operations' 
-                    : 'Connect GitHub for real sync functionality'
-                  }
-                </p>
+        {!githubConnected ? (
+          <GitHubTokenInput onTokenSet={checkGitHubConnection} />
+        ) : (
+          <FormCard className="border border-green-200 bg-green-50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Github className="h-6 w-6 text-green-600" />
+                <div>
+                  <h3 className="font-semibold text-green-900">✅ GitHub Connected & Ready</h3>
+                  <p className="text-sm text-green-700">
+                    All systems go for real repository operations!
+                  </p>
+                </div>
               </div>
-            </div>
-            {!githubConnected && (
               <button
-                onClick={handleConnectGithub}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                onClick={() => {
+                  githubAuth.clearToken();
+                  setGithubConnected(false);
+                }}
+                className="px-3 py-1 text-sm text-green-700 hover:text-green-900 transition-colors"
               >
-                <Github className="h-4 w-4" />
-                <span>Connect GitHub</span>
+                Disconnect
               </button>
-            )}
-          </div>
-        </FormCard>
+            </div>
+          </FormCard>
+        )}
 
         {/* Repository Sync Status */}
         {syncStatus && (
