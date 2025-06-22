@@ -5,12 +5,16 @@ import { designTokens } from '../tokens';
 interface PageContainerProps {
   children: React.ReactNode;
   className?: string;
+  variant?: 'narrow' | 'wide';
 }
 
 export const PageContainer: React.FC<PageContainerProps> = ({ 
   children, 
-  className = '' 
+  className = '',
+  variant = 'narrow'
 }) => {
+  const maxWidth = variant === 'wide' ? '800px' : designTokens.container.maxWidth;
+  
   return (
     <div 
       className={`min-h-screen py-10 px-4 ${className}`}
@@ -18,7 +22,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
     >
       <div 
         className="mx-auto"
-        style={{ maxWidth: designTokens.container.maxWidth }}
+        style={{ maxWidth }}
       >
         {children}
       </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageContainer, FormCard } from '@/design-system';
@@ -96,7 +95,6 @@ const AnalysisResults = () => {
     }
   };
 
-  // Add debug info for troubleshooting
   console.log('Current state:', { loading, error, stagingEnv, repoUrl, email });
 
   if (loading) {
@@ -108,16 +106,18 @@ const AnalysisResults = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer variant="wide">
       <FormCard title="✨ Your Real App with Design System Applied!">
         <div className="space-y-6">
-          <StagingEnvironmentCard 
-            stagingEnv={stagingEnv}
-            onCreatePR={createPullRequest}
-            creatingPR={creatingPR}
-          />
-          
-          <ComponentsAnalyzedCard stagingEnv={stagingEnv} />
+          <div className="grid md:grid-cols-2 gap-6">
+            <StagingEnvironmentCard 
+              stagingEnv={stagingEnv}
+              onCreatePR={createPullRequest}
+              creatingPR={creatingPR}
+            />
+            
+            <ComponentsAnalyzedCard stagingEnv={stagingEnv} />
+          </div>
 
           {/* What's Different */}
           <div className="bg-yellow-50 p-6 rounded-lg">
