@@ -80,10 +80,10 @@ export const RealStagingDashboard: React.FC = () => {
         <div className="space-y-6">
           {/* Repository Info */}
           <div className="bg-blue-50 p-4 rounded-xl">
-            <h3 className="font-semibold text-blue-900 mb-2">
+            <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">
               🔗 Connected Repository
             </h3>
-            <p className="text-sm text-blue-700">
+            <p className="text-xs sm:text-sm text-blue-700 break-all">
               https://github.com/omriformula/V2-formula-demo
             </p>
             <p className="text-xs text-blue-600 mt-1">
@@ -96,7 +96,7 @@ export const RealStagingDashboard: React.FC = () => {
             <button
               onClick={handleCreateStaging}
               disabled={isCreating}
-              className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 transition-all duration-200"
+              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 transition-all duration-200 text-sm sm:text-base"
             >
               {isCreating ? '🔄 Cloning & Deploying Your Repo...' : '🚀 Create Real Staging Environment'}
             </button>
@@ -115,10 +115,10 @@ export const RealStagingDashboard: React.FC = () => {
           {stagingEnv && (
             <div className="border-t pt-6">
               <div className="bg-purple-50 p-4 rounded-xl mb-4">
-                <h3 className="font-semibold text-purple-900 mb-2">
+                <h3 className="font-semibold text-purple-900 mb-2 text-sm sm:text-base">
                   🎯 360° Staging Audit
                 </h3>
-                <p className="text-sm text-purple-700">
+                <p className="text-xs sm:text-sm text-purple-700">
                   Validate your real staging environment before sending to dev team
                 </p>
               </div>
@@ -126,7 +126,7 @@ export const RealStagingDashboard: React.FC = () => {
               <button
                 onClick={handleRunAudit}
                 disabled={isAuditing}
-                className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 transition-all duration-200"
+                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 transition-all duration-200 text-sm sm:text-base"
               >
                 {isAuditing ? '🔄 Auditing Real Environment...' : '🔍 Run 360° Audit on Staging'}
               </button>
