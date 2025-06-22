@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { StagingEnvironment } from '@/services/stagingDeployer';
-import { FullPagePreview } from './FullPagePreview';
+import { ActualPageMockups } from './ActualPageMockups';
 
 interface StagingEnvironmentCardProps {
   stagingEnv: StagingEnvironment;
@@ -34,8 +34,8 @@ export const StagingEnvironmentCard: React.FC<StagingEnvironmentCardProps> = ({
           </div>
         </div>
 
-        {/* Full Page Preview */}
-        <FullPagePreview stagingEnv={stagingEnv} />
+        {/* Actual Page Mockups */}
+        <ActualPageMockups />
 
         <div className="pt-4 border-t">
           <button
