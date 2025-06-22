@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageContainer, FormCard, FormField, StyledInput, StyledButton, StyledForm } from '@/design-system';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, Camera } from 'lucide-react';
@@ -8,6 +9,7 @@ const LeadCapture = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,12 +18,18 @@ const LeadCapture = () => {
     // Simulate form submission
     setTimeout(() => {
       toast({
-        title: "Request Submitted!",
-        description: "We'll integrate the AcceptanceFlow and send you the updated code within 24 hours."
+        title: "Starting Analysis!",
+        description: "Analyzing your repository for design improvements..."
       });
+      
+      // Navigate to analysis results with parameters
+      const params = new URLSearchParams({
+        repo: githubRepo,
+        email: email
+      });
+      
+      navigate(`/analysis-results?${params.toString()}`);
       setIsSubmitting(false);
-      setGithubRepo('');
-      setEmail('');
     }, 1000);
   };
 
@@ -118,7 +126,7 @@ const LeadCapture = () => {
           </FormField>
 
           <StyledButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Share'}
+            {isSubmitting ? 'Starting Analysis...' : 'Analyze My Repository'}
           </StyledButton>
         </StyledForm>
 
